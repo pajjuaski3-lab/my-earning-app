@@ -2,32 +2,55 @@
 <html lang="kn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mysore Earn App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Earning App - Ad Live</title>
 <style>
-body{font-family:system-ui;background:#eef2ff;margin:0;padding:20px;text-align:center}
-.card{background:white;max-width:380px;margin:20px auto;padding:25px;border-radius:20px;box-shadow:0 10px 25px #0002}
-button{background:#2563eb;color:white;border:none;padding:16px 0;width:100%;border-radius:12px;font-size:18px;font-weight:bold;margin-top:15px}
-.task{background:#f1f5f9;padding:12px;border-radius:10px;margin-top:12px;text-align:left}
+body{font-family:Arial;background:#f0f2f5;text-align:center;padding:20px}
+.box{background:white;padding:20px;border-radius:15px;max-width:400px;margin:auto;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+.task{background:#e8f5e9;padding:12px;margin:10px 0;border-radius:8px;text-align:left}
+button{background:#1a73e8;color:white;border:none;padding:15px 25px;border-radius:10px;font-size:18px;width:100%;font-weight:bold;margin-top:10px}
+.ad-box{background:#fff3cd;border:2px dashed #ff9800;padding:15px;margin:15px 0;border-radius:10px}
 </style>
+
+<script src="https://alwingold.com/88/tag.min.js" data-zone="123456" async data-cfasync="false"></script>
+
 </head>
 <body>
-<div class="card">
-<h2>💰 ಮೈಸೂರು ಡೈಲಿ ಅರ್ನ್</h2>
-<p>ಟಾಸ್ಕ್ ಮಾಡಿ ದಿನಕ್ಕೆ ₹500 ವರೆಗೆ ಗಳಿಸಿ</p>
+<div class="box">
+<h2>💰 My Earning App</h2>
+<p>Task ಮಾಡಿ ಹಣ ಗಳಿಸಿ</p>
 
-<div class="task">✅ Task 1: Ad ನೋಡಿ - ₹10</div>
-<div class="task">✅ Task 2: ಆಪ್ ಡೌನ್ಲೋಡ್ ಮಾಡಿ - ₹20</div>
+<div class="ad-box">
+<p>🔥 Sponsored Ad - Click ಮಾಡಿ</p>
+<div id="ad-container">
+<script>
+  // Ad will load here
+</script>
+</div>
+</div>
+
+<div class="task">✅ Task 1: App ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ - ₹10</div>
+<div class="task">✅ Task 2: ವಿಡಿಯೋ ನೋಡಿ - ₹20</div>
 <div class="task">✅ Task 3: ಸ್ನೇಹಿತರಿಗೆ ಶೇರ್ ಮಾಡಿ - ₹50</div>
 
 <button onclick="earn()">Task Complete ಮಾಡಿ ₹ ಗಳಿಸಿ</button>
 <p id="msg" style="color:green;font-weight:bold;margin-top:15px"></p>
+<p id="wallet" style="font-weight:bold;margin-top:10px">Wallet: ₹0</p>
 </div>
 
 <script>
+let balance = 0;
 function earn(){
-document.getElementById('msg').innerHTML = "🎉 ಅಭಿನಂದನೆಗಳು! ₹10 ನಿಮ್ಮ ವಾಲೆಟ್ ಗೆ ಸೇರಿದೆ";
-setTimeout(()=>{window.open('https://www.google.com','_blank')},500);
+  document.getElementById('msg').innerHTML = "⏳ Ad ಲೋಡ್ ಆಗುತ್ತಿದೆ...";
+
+  // Ad link - ಇದನ್ನು ಬದಲಾಯಿಸಬೇಕು ನಿನ್ನ Adsterra ಲಿಂಕ್ ನೊಂದಿಗೆ
+  window.open('https://www.google.com', '_blank');
+
+  setTimeout(()=>{
+    balance += 10;
+    document.getElementById('wallet').innerText = "Wallet: ₹" + balance;
+    document.getElementById('msg').innerHTML = "🎉 ಅಭಿನಂದನೆಗಳು! ₹10 ನಿಮ್ಮ ವಾಲೆಟ್ ಗೆ ಸೇರಿದೆ";
+  }, 1500);
 }
 </script>
 </body>
