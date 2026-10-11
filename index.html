@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mysore Earn App</title>
+<style>
+body{font-family:system-ui;background:#eef2ff;margin:0;padding:20px;text-align:center}
+.card{background:white;max-width:380px;margin:20px auto;padding:25px;border-radius:20px;box-shadow:0 10px 25px #0002}
+button{background:#2563eb;color:white;border:none;padding:16px 0;width:100%;border-radius:12px;font-size:18px;font-weight:bold;margin-top:15px}
+.task{background:#f1f5f9;padding:12px;border-radius:10px;margin-top:12px;text-align:left}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>💰 ಮೈಸೂರು ಡೈಲಿ ಅರ್ನ್</h2>
+<p>ಟಾಸ್ಕ್ ಮಾಡಿ ದಿನಕ್ಕೆ ₹500 ವರೆಗೆ ಗಳಿಸಿ</p>
+
+<div class="task">✅ Task 1: Ad ನೋಡಿ - ₹10</div>
+<div class="task">✅ Task 2: ಆಪ್ ಡೌನ್ಲೋಡ್ ಮಾಡಿ - ₹20</div>
+<div class="task">✅ Task 3: ಸ್ನೇಹಿತರಿಗೆ ಶೇರ್ ಮಾಡಿ - ₹50</div>
+
+<button onclick="earn()">Task Complete ಮಾಡಿ ₹ ಗಳಿಸಿ</button>
+<p id="msg" style="color:green;font-weight:bold;margin-top:15px"></p>
+</div>
+
+<script>
+function earn(){
+document.getElementById('msg').innerHTML = "🎉 ಅಭಿನಂದನೆಗಳು! ₹10 ನಿಮ್ಮ ವಾಲೆಟ್ ಗೆ ಸೇರಿದೆ";
+setTimeout(()=>{window.open('https://www.google.com','_blank')},500);
+}
+</script>
+</body>
+</html>
