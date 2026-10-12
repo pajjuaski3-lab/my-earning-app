@@ -32,10 +32,8 @@ jobs:
       - name: Install Android SDK packages
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-      - name: Build debug APK
-        run: |
-          gradle --version
-          gradle assembleDebug
+            - name: Build debug APK
+        run: gradle assembleDebug
 
       - name: Upload APK
         if: success()
