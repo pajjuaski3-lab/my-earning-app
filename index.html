@@ -1,9 +1,35 @@
-git init
-git add .
-git commit -m "Initial Earn Money app"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/EarnMoney.git
-git push -u origin mainnpm install -g firebase-tools
-firebase login
-firebase init functions
-firebase deploy --only functionsfirebase deploy --only firestore:rules
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn()
+                  && request.auth.uid == userId;
+      allow write: if false;
+
+      match /wallet/{walletId} {
+        allow read: if signedIn()
+                    && request.auth.uid == userId;
+        allow write: if false;
+      }
+    }
+
+    match /withdrawals/{withdrawalId} {
+      allow read: if signedIn()
+        && resource.data.userId == request.auth.uid;
+      allow write: if false;
+    }
+
+    match /ledger/{entryId} {
+      allow read: if signedIn()
+        && resource.data.userId == request.auth.uid;
+      allow write: if false;
+    }
+  }
+}
