@@ -6,53 +6,49 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MobileAds.initialize(this)
-        setContent { MaterialTheme { EarnMoneyApp() } }
+        setContent {
+            MaterialTheme {
+                EarnMoneyApp()
+            }
+        }
     }
 }
 
 @Composable
 fun EarnMoneyApp() {
-    var tab by remember { mutableStateOf("Home") }
-    var demoPoints by remember { mutableIntStateOf(0) }
-    var upi by remember { mutableStateOf("") }
+    var page by remember { mutableStateOf("Home") }
+    var points by remember { mutableIntStateOf(0) }
     var amount by remember { mutableStateOf("100") }
+    var upi by remember { mutableStateOf("") }
+    var referral by remember { mutableStateOf("PAJJU123") }
     var message by remember { mutableStateOf("") }
 
-    val tasks = listOf(
-        "Complete your profile" to 10,
-        "Read app safety tips" to 5,
-        "Invite a friend" to 20
-    )
-
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Earn Money") }
+            )
+        },
         bottomBar = {
             NavigationBar {
-                listOf("Home", "Tasks", "Wallet", "Refer").forEach { item ->
+                listOf("Home", "Tasks", "Wallet", "Refer").forEach {
                     NavigationBarItem(
-                        selected = tab == item,
-                        onClick = { tab = item },
+                        selected = page == it,
+                        onClick = { page = it },
                         icon = {
                             Text(
-                                when (item) {
+                                when (it) {
                                     "Home" -> "⌂"
                                     "Tasks" -> "✓"
                                     "Wallet" -> "₹"
@@ -60,7 +56,7 @@ fun EarnMoneyApp() {
                                 }
                             )
                         },
-                        label = { Text(item) }
+                        label = { Text(it) }
                     )
                 }
             }
@@ -71,24 +67,15 @@ fun EarnMoneyApp() {
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                Text(
-                    "Earn Money",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text("Tasks • Wallet • Referral")
-            }
-
-            item {
                 Card {
-                    Column(Modifier.padding(18.dp)) {
-                        Text("Demo Wallet Points")
+                    Column(Modifier.padding(20.dp)) {
+                        Text("ನಿಮ್ಮ Demo Wallet")
                         Text(
-                            "$demoPoints points",
-                            fontSize = 28.sp,
+                            "$points Points",
+                            fontSize = 30.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text("ಇವು ನಿಜವಾದ ಹಣವಲ್ಲ.")
@@ -96,33 +83,51 @@ fun EarnMoneyApp() {
                 }
             }
 
-            when (tab) {
+            when (page) {
                 "Home" -> {
                     item {
-                        Text("Welcome!", fontSize = 22.sp)
-                        Text("Tasks ಪೂರ್ಣಗೊಳಿಸಿ demo points ಗಳಿಸಿ.")
+                        Text("Welcome!", fontSize = 24.sp)
+                        Text("Tasks ಪೂರ್ಣಗೊಳಿಸಿ demo points ಪಡೆಯಿರಿ.")
+                        Text("ಜಾಹೀರಾತುಗಳನ್ನು ಇಲ್ಲಿ ನಂತರ ಸೇರಿಸಬಹುದು.")
                     }
-                    item { DemoBannerAd() }
-                    items(tasks) { task ->
-                        TaskCard(task.first, task.second) {
-                            demoPoints += task.second
-                            message = "Demo points ಸೇರಿಸಲಾಗಿದೆ."
+                    item {
+                        Button(
+                            onClick = { page = "Tasks" },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Start Earning")
                         }
                     }
                 }
 
                 "Tasks" -> {
-                    item { Text("Available Tasks", fontSize = 22.sp) }
-                    items(tasks) { task ->
-                        TaskCard(task.first, task.second) {
-                            demoPoints += task.second
-                            message = "Demo points ಸೇರಿಸಲಾಗಿದೆ."
+                    item {
+                        Text("Available Tasks", fontSize = 22.sp)
+                    }
+                    item {
+                        TaskItem("Complete profile", 10) {
+                            points += 10
+                            message = "10 demo points ಸೇರಿಸಲಾಗಿದೆ."
+                        }
+                    }
+                    item {
+                        TaskItem("Read safety tips", 5) {
+                            points += 5
+                            message = "5 demo points ಸೇರಿಸಲಾಗಿದೆ."
+                        }
+                    }
+                    item {
+                        TaskItem("Daily bonus demo", 2) {
+                            points += 2
+                            message = "2 demo points ಸೇರಿಸಲಾಗಿದೆ."
                         }
                     }
                 }
 
                 "Wallet" -> {
-                    item { Text("Withdrawal Request", fontSize = 22.sp) }
+                    item {
+                        Text("Withdrawal Request", fontSize = 22.sp)
+                    }
                     item {
                         OutlinedTextField(
                             value = amount,
@@ -135,7 +140,7 @@ fun EarnMoneyApp() {
                         OutlinedTextField(
                             value = upi,
                             onValueChange = { upi = it },
-                            label = { Text("Your UPI ID") },
+                            label = { Text("UPI ID") },
                             placeholder = { Text("name@bank") },
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -143,14 +148,16 @@ fun EarnMoneyApp() {
                     item {
                         Button(
                             onClick = {
-                                message =
-                                    if (upi.contains("@") &&
-                                        (amount.toIntOrNull() ?: 0) > 0
-                                    ) {
-                                        "Demo ಮಾತ್ರ: request backend ಗೆ ಕಳುಹಿಸಿಲ್ಲ."
-                                    } else {
-                                        "ಸರಿಯಾದ ಮೊತ್ತ ಮತ್ತು UPI ID ನಮೂದಿಸಿ."
-                                    }
+                                val value = amount.toIntOrNull()
+                                message = if (
+                                    value != null &&
+                                    value > 0 &&
+                                    upi.contains("@")
+                                ) {
+                                    "Demo request ಮಾತ್ರ. ಹಣ ಕಳುಹಿಸಿಲ್ಲ."
+                                } else {
+                                    "ಮೊತ್ತ ಮತ್ತು UPI ID ಪರಿಶೀಲಿಸಿ."
+                                }
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -159,40 +166,47 @@ fun EarnMoneyApp() {
                     }
                     item {
                         Text(
-                            "ಇದು UI demo. ನಿಜವಾದ withdrawal ಅಥವಾ UPI payment ನಡೆಯುವುದಿಲ್ಲ."
+                            "ಈ ಆವೃತ್ತಿಯಲ್ಲಿ ನಿಜವಾದ UPI ಪಾವತಿ ಇಲ್ಲ."
                         )
                     }
                 }
 
                 "Refer" -> {
-                    item { Text("Refer & Earn", fontSize = 22.sp) }
                     item {
-                        Text("ನಿಮ್ಮ referral code: DEMO123")
-                        Text("ಈ code demo ಮಾತ್ರ; referral backend ಇನ್ನೂ ಸೇರಿಸಿಲ್ಲ.")
+                        Text("Refer & Earn", fontSize = 22.sp)
+                        Text("Demo Referral Code: $referral")
+                    }
+                    item {
                         Button(
                             onClick = {
-                                message = "ನಿಮ್ಮ referral code: DEMO123"
+                                message =
+                                    "Referral code: $referral"
                             }
-                        ) { Text("Show Referral Code") }
+                        ) {
+                            Text("Show Referral Code")
+                        }
                     }
                 }
             }
 
             if (message.isNotBlank()) {
-                item { Text(message, color = MaterialTheme.colorScheme.primary) }
+                item {
+                    Text(
+                        message,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun TaskCard(
+fun TaskItem(
     title: String,
-    points: Int,
-    onComplete: () -> Unit
+    reward: Int,
+    onClick: () -> Unit
 ) {
-    var completed by remember { mutableStateOf(false) }
-
     Card {
         Row(
             modifier = Modifier
@@ -202,35 +216,11 @@ fun TaskCard(
         ) {
             Column(Modifier.weight(1f)) {
                 Text(title, fontWeight = FontWeight.Medium)
-                Text("$points demo points")
+                Text("$reward demo points")
             }
-            Button(
-                enabled = !completed,
-                onClick = {
-                    completed = true
-                    onComplete()
-                }
-            ) {
-                Text(if (completed) "Done" else "Start")
+            Button(onClick = onClick) {
+                Text("Complete")
             }
         }
     }
-}
-
-@Composable
-fun DemoBannerAd() {
-    val context = LocalContext.current
-
-    AndroidView(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp),
-        factory = {
-            AdView(context).apply {
-                setAdSize(AdSize.BANNER)
-                adUnitId = "ca-app-pub-3940256099942544/9214589741"
-                loadAd(AdRequest.Builder().build())
-            }
-        }
-    )
 }
