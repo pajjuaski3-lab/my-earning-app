@@ -1,66 +1,59 @@
-<!DOCTYPE html>
-<html><head><meta name="viewport" content="width=device-width, initial-scale=1">
+<div id="app"></div>
+<script>
+document.getElementById("app").innerHTML=`
 <style>
-body{margin:0;padding:10px;background:#eee;font-family:Arial}
 .top{background:orange;color:#fff;padding:12px;border-radius:10px;text-align:center;font-size:20px;font-weight:bold}
-.box{background:#fff;padding:10px;border-radius:10px;margin:10px 0;text-align:center}
+.box{background:#fff;padding:10px;border-radius:10px;margin:10px 0;text-align:center;box-shadow:0 2px 5px #ccc}
 .green{background:#4CAF50;color:#fff;padding:15px;border-radius:12px;text-align:center}
-.btn{padding:10px 20px;border:none;border-radius:8px;background:orange;color:#fff;font-weight:bold;margin:4px}
+.btn{padding:10px 18px;border:none;border-radius:8px;background:orange;color:#fff;font-weight:bold;margin:4px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.card{background:#fff;padding:15px;border-radius:10px;text-align:center}
-#pop{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:9999}
-.popbox{background:#fff;padding:20px;border-radius:15px;width:85%;text-align:center}
-</style></head><body>
-
+.card{background:#fff;padding:15px;border-radius:10px;text-align:center;box-shadow:0 2px 5px #ccc}
+</style>
 <div class="top">Wallet: ₹<span id="wal">21</span></div>
-
 <div class="box">
 <button class="btn" style="background:green" onclick="addCash()">ADD CASH</button>
 <button class="btn" style="background:blue" onclick="withdraw()">WITHDRAW</button>
 </div>
-
 <div class="green">
 <b>REFER & EARN</b><br><br>
-Your Code: <b id="rc" style="background:#fff;color:green;padding:5px 10px;border-radius:5px;">REF1234</b><br><br>
-<button class="btn" style="background:#fff;color:green" onclick="share()">SHARE</button><br><br>
-<input id="refInput" placeholder="Refer Code ಹಾಕಿ" style="padding:10px;border-radius:8px;border:none;width:70%"><br><br>
-<button class="btn" onclick="useRef()">GET ₹100</button><br>
-<div style="font-size:12px;margin-top:8px;">Owner Earn: ₹<span id="earn">0</span></div>
+Your Code: <b style="background:#fff;color:green;padding:5px 10px;border-radius:5px;">${"REF"+Math.floor(1000+Math.random()*9000)}</b><br><br>
+<button class="btn" style="background:#fff;color:green" onclick="alert('Share Link Copied!')">SHARE</button><br><br>
+<input id="refInput" placeholder="Refer Code" style="padding:10px;border-radius:8px;border:none;width:70%"><br><br>
+<button class="btn" onclick="useRef()">GET ₹100</button>
 </div>
-
-<div class="grid">
-<div class="card"><b>SPIN</b><br><br><button class="btn" onclick="game1()">PLAY</button></div>
-<div class="card"><b>SCRATCH</b><br><br><button class="btn" onclick="game2()">PLAY</button></div>
-<div class="card"><b>GUESS</b><br><br><button class="btn" onclick="game3()">PLAY</button></div>
-<div class="card"><b>TAP</b><br><br><button class="btn" onclick="game4()">PLAY</button></div>
-<div class="card"><b>MATH</b><br><br><button class="btn" onclick="game5()">PLAY</button></div>
-<div class="card"><b>DICE</b><br><br><button class="btn" onclick="game6()">PLAY</button></div>
-<div class="card" style="grid-column:span 2;background:gold"><b>MEMORY ₹15</b><br><br><button class="btn" style="background:green" onclick="game7()">PLAY</button></div>
+<div class="grid" style="margin-top:10px">
+<div class="card"><b>SPIN</b><br><br><button class="btn" onclick="playGame('SPIN ₹5 Won!')">PLAY</button></div>
+<div class="card"><b>SCRATCH</b><br><br><button class="btn" onclick="playGame('SCRATCH ₹3 Won!')">PLAY</button></div>
+<div class="card"><b>GUESS</b><br><br><button class="btn" onclick="playGame('GUESS ₹4 Won!')">PLAY</button></div>
+<div class="card"><b>TAP</b><br><br><button class="btn" onclick="playGame('TAP ₹2 Won!')">PLAY</button></div>
+<div class="card"><b>MATH</b><br><br><button class="btn" onclick="playGame('MATH ₹6 Won!')">PLAY</button></div>
+<div class="card"><b>DICE</b><br><br><button class="btn" onclick="playGame('DICE ₹10 Won!')">PLAY</button></div>
+<div class="card" style="grid-column:span 2;background:gold"><b>MEMORY ₹15</b><br><br><button class="btn" style="background:green" onclick="playGame('MEMORY ₹15 Won!')">PLAY NOW</button></div>
 </div>
+`;
 
-<div id="pop"><div class="popbox"><div id="popText"></div><br><button class="btn" style="background:red" onclick="document.getElementById('pop').style.display='none'">CLOSE</button></div></div>
-
-<script>
 var wallet=21;
-var owner=0;
-var myCode="REF"+Math.floor(1000+Math.random()*9000);
-document.getElementById("rc").innerHTML=myCode;
-document.getElementById("wal").innerHTML=wallet;
-
-function showPop(html){document.getElementById("popText").innerHTML=html; document.getElementById("pop").style.display="flex";}
-function addMoney(n){wallet=wallet+n; document.getElementById("wal").innerHTML=wallet; showPop("<h2>Won ₹"+n+"!</h2><p>Wallet: ₹"+wallet+"</p>");}
-
-function game1(){var r=Math.floor(Math.random()*10); if(r>5){addMoney(5)}else{showPop("<h3>Number: "+r+"</h3><p>No Win, Try Again!</p><button class='btn' onclick='game1()'>SPIN AGAIN</button>")}}
-function game2(){showPop("<h3>Scratch Card</h3><div onclick='addMoney(3)' style='background:silver;padding:30px;border-radius:10px;'>TAP TO SCRATCH & WIN ₹3</div>")}
-function game3(){var num=Math.floor(Math.random()*10)+1; var g=prompt("Guess 1 to 10"); if(g==num){addMoney(4)}else{alert("Wrong! Was "+num)}}
-function game4(){var c=0; var t=prompt("5 Sec ನಲ್ಲಿ ಎಷ್ಟು ಸಲ TAP ಮಾಡ್ತೀಯಾ? OK ಒತ್ತಿ FAST ಆಗಿ Screen ಮೇಲೆ TAP ಮಾಡು!"); showPop("<h2>Tap Game</h2><p>ನೀನು ಗೆದ್ದೆ!</p><button class='btn' onclick='addMoney(2)'>GET ₹2</button>")}
-function game5(){var a=Math.floor(Math.random()*10), b=Math.floor(Math.random()*10); var ans=prompt(a+" + "+b+" = ?"); if(ans==a+b){addMoney(6)}else{alert("Wrong! Answer "+(a+b))}}
-function game6(){var d=Math.floor(Math.random()*6)+1; if(d>=4){addMoney(d==6?10:2)}else{showPop("<h2>Dice: "+d+"</h2><p>Lose! Try Again</p><button class='btn' onclick='game6()'>ROLL AGAIN</button>")}}
-function game7(){addMoney(15);}
-
-function share(){var link="https://myearning.app?ref="+myCode; var txt="ನನ್ನ Code "+myCode+" ಹಾಕಿ ₹100 FREE ಪಡೆಯಿರಿ! "+link; window.open("https://wa.me/?text="+encodeURIComponent(txt));}
-function useRef(){var c=document.getElementById("refInput").value; if(!c){alert("Code ಹಾಕಿ"); return;} wallet+=100; owner+=150; document.getElementById("wal").innerHTML=wallet; document.getElementById("earn").innerHTML=owner; alert("₹100 Added! Owner ಗೆ ₹150");}
-function addCash(){var a=prompt("How much Add? Min 10"); if(a>=10){window.location.href="upi://pay?pa=9740384015@ybl&pn=Prajwal&am="+a+"&cu=INR"}}
-function withdraw(){var a=prompt("Withdraw Amount? Min 50, Wallet: "+wallet); if(a<50){alert("Min 50"); return;} if(a>wallet){alert("No Money"); return;} var fee=Math.round(a*0.1); var get=a-fee; wallet-=a; document.getElementById("wal").innerHTML=wallet; owner+=fee; document.getElementById("earn").innerHTML=owner; window.open("https://wa.me/919740384015?text=Withdraw ₹"+a+" UPI? UserGet ₹"+get); alert("Withdraw Request Sent! You get ₹"+get);}
+function playGame(msg){
+  wallet+=5;
+  document.getElementById("wal").innerText=wallet;
+  alert("🎉 "+msg+" Wallet: ₹"+wallet);
+}
+function useRef(){
+  wallet+=100;
+  document.getElementById("wal").innerText=wallet;
+  alert("₹100 Added! Wallet: ₹"+wallet);
+}
+function addCash(){
+  var a=prompt("Amount? Min 10");
+  if(a>=10) location.href="upi://pay?pa=9740384015@ybl&pn=Prajwal&am="+a+"&cu=INR";
+}
+function withdraw(){
+  var a=prompt("Withdraw Amount? Wallet: "+wallet);
+  if(a>=50 && a<=wallet){
+    wallet-=a;
+    document.getElementById("wal").innerText=wallet;
+    window.open("https://wa.me/919740384015?text=Withdraw ₹"+a);
+    alert("Withdraw Sent! You get ₹"+Math.round(a*0.9));
+  }else{alert("Min 50 or No Balance");}
+}
 </script>
-</body></html>
