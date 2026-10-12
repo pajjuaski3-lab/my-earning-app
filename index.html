@@ -1,16 +1,72 @@
-<div style="text-align:center; padding:10px;">
-<h2>🎮 Play & Earn Game</h2>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{font-family:Arial; background:#f2f2f2; margin:0; padding:10px; text-align:center;}
+.wallet{background:linear-gradient(45deg, #FF9800, #F44336); color:white; padding:15px; border-radius:15px; font-size:20px; font-weight:bold;}
+.bonus{background:green; color:white; padding:8px; border-radius:20px; display:inline-block; margin:5px;}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;}
+.game{background:white; padding:15px; border-radius:15px; box-shadow:0 2px 5px gray; cursor:pointer;}
+.game h3{margin:5px; font-size:16px;}
+button{background:orange; color:white; border:none; padding:10px 20px; border-radius:10px; font-weight:bold; cursor:pointer;}
+.refer{background:white; padding:15px; border-radius:15px; margin-top:15px; border:2px dashed green;}
+</style>
+</head>
+<body>
 
-<a href="https://www.crazygames.com" target="_blank" style="display:block; padding:15px; background:orange; color:white; border-radius:10px; text-decoration:none; font-weight:bold;">🔥 CLICK TO PLAY 100+ GAMES</a>
+<div class="wallet">💰 Wallet: ₹<span id="wallet">21</span></div>
+<div class="bonus">🎁 Welcome Bonus ₹21 Added!</div>
 
-<br><br>
+<h2>💸 7 Earning Games ಆಡಿ - ದುಡ್ಡು ಗಳಿಸಿ</h2>
 
-<h3>👇 ಕೆಳಗೆ Game ಆಡಿ</h3>
-
-<iframe src="https://www.google.com/logos/2010/pacman10-i.html" width="100%" height="400" frameborder="0"></iframe>
-
-<br><br>
-
-<a href="https://poki.com" target="_blank" style="display:block; padding:12px; background:green; color:white; border-radius:10px; text-decoration:none;">🎯 ಇನ್ನೂ ಹೆಚ್ಚು Games ಆಡಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ</a>
-
+<div class="grid">
+<div class="game" onclick="playGame(5)"><h3>🎡</h3><h3>Spin & Win</h3><p>Earn ₹5</p><button>PLAY</button></div>
+<div class="game" onclick="playGame(3)"><h3>🎟️</h3><h3>Scratch Card</h3><p>Earn ₹3</p><button>PLAY</button></div>
+<div class="game" onclick="playGame(4)"><h3>🔢</h3><h3>Guess Number</h3><p>Earn ₹4</p><button>PLAY</button></div>
+<div class="game" onclick="playGame(2)"><h3>👆</h3><h3>Tap & Earn</h3><p>Earn ₹2</p><button>PLAY</button></div>
+<div class="game" onclick="playGame(6)"><h3>🧠</h3><h3>Math Quiz</h3><p>Earn ₹6</p><button>PLAY</button></div>
+<div class="game" onclick="playGame(3)"><h3>📺</h3><h3>Watch Ad</h3><p>Earn ₹3</p><button>PLAY</button></div>
+<div class="game" onclick="playGame(7)" style="grid-column: span 2; background:gold;"><h3>🎯 Daily Bonus</h3><p>Earn ₹7</p><button>CLAIM</button></div>
 </div>
+
+<div class="refer">
+<h3>👥 Refer & Earn - ₹20 ಪ್ರತಿ Refer ಗೆ!</h3>
+<p>ನಿನ್ನ Link Share ಮಾಡು, ನಿನ್ನ ಗೆಳೆಯ Join ಆದ್ರೆ ನಿನಗೆ ₹20 ಬರುತ್ತೆ!</p>
+<p id="referLink" style="background:#eee; padding:8px; border-radius:5px; word-break:break-all;">https://myearningapp.com/refer?code=PRAJ123</p>
+<button onclick="shareRefer()" style="background:green;">SHARE LINK</button>
+<br><br>
+<button onclick="addReferCash()">DEMO: Refer ಆಗಿದೆ ಅಂತ ತೋರಿಸು (+₹20)</button>
+</div>
+
+<script>
+let wallet = localStorage.getItem("my_wallet") ? parseInt(localStorage.getItem("my_wallet")) : 21;
+document.getElementById("wallet").innerText = wallet;
+
+function playGame(amount){
+ wallet = wallet + amount;
+ localStorage.setItem("my_wallet", wallet);
+ document.getElementById("wallet").innerText = wallet;
+ alert("🎉 Congratulations! ₹" + amount + " Added to Wallet!");
+}
+
+function addReferCash(){
+ wallet = wallet + 20;
+ localStorage.setItem("my_wallet", wallet);
+ document.getElementById("wallet").innerText = wallet;
+ alert("🔥 Refer Earning! ₹20 Added! ನಿನ್ನ ಗೆಳೆಯ Join ಆಗಿದ್ದಾನೆ!");
+}
+
+function shareRefer(){
+ let link = document.getElementById("referLink").innerText;
+ if(navigator.share){
+   navigator.share({title: 'My Earning App', text: 'Join ಮಾಡಿ ₹21 Bonus ಪಡೆಯಿರಿ!', url: link});
+ }else{
+   navigator.clipboard.writeText(link);
+   alert("Link Copy ಆಗಿದೆ! WhatsApp ನಲ್ಲಿ Share ಮಾಡು!");
+ }
+}
+</script>
+
+</body>
+</html>
