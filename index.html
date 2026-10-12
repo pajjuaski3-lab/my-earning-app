@@ -56,4 +56,11 @@ function withdraw(){
     alert("Withdraw Sent! You get ₹"+Math.round(a*0.9));
   }else{alert("Min 50 or No Balance");}
 }
-</script>
+</script>// UPI
+requestManualPayout(
+    amountRupees = 100,
+    method = "UPI",
+    destination = "yourname@bank"
+) { message ->
+    println(message)
+}
