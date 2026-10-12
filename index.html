@@ -1,66 +1,24 @@
-<div id="app"></div>
-<script>
-document.getElementById("app").innerHTML=`
-<style>
-.top{background:orange;color:#fff;padding:12px;border-radius:10px;text-align:center;font-size:20px;font-weight:bold}
-.box{background:#fff;padding:10px;border-radius:10px;margin:10px 0;text-align:center;box-shadow:0 2px 5px #ccc}
-.green{background:#4CAF50;color:#fff;padding:15px;border-radius:12px;text-align:center}
-.btn{padding:10px 18px;border:none;border-radius:8px;background:orange;color:#fff;font-weight:bold;margin:4px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.card{background:#fff;padding:15px;border-radius:10px;text-align:center;box-shadow:0 2px 5px #ccc}
-</style>
-<div class="top">Wallet: ₹<span id="wal">21</span></div>
-<div class="box">
-<button class="btn" style="background:green" onclick="addCash()">ADD CASH</button>
-<button class="btn" style="background:blue" onclick="withdraw()">WITHDRAW</button>
-</div>
-<div class="green">
-<b>REFER & EARN</b><br><br>
-Your Code: <b style="background:#fff;color:green;padding:5px 10px;border-radius:5px;">${"REF"+Math.floor(1000+Math.random()*9000)}</b><br><br>
-<button class="btn" style="background:#fff;color:green" onclick="alert('Share Link Copied!')">SHARE</button><br><br>
-<input id="refInput" placeholder="Refer Code" style="padding:10px;border-radius:8px;border:none;width:70%"><br><br>
-<button class="btn" onclick="useRef()">GET ₹100</button>
-</div>
-<div class="grid" style="margin-top:10px">
-<div class="card"><b>SPIN</b><br><br><button class="btn" onclick="playGame('SPIN ₹5 Won!')">PLAY</button></div>
-<div class="card"><b>SCRATCH</b><br><br><button class="btn" onclick="playGame('SCRATCH ₹3 Won!')">PLAY</button></div>
-<div class="card"><b>GUESS</b><br><br><button class="btn" onclick="playGame('GUESS ₹4 Won!')">PLAY</button></div>
-<div class="card"><b>TAP</b><br><br><button class="btn" onclick="playGame('TAP ₹2 Won!')">PLAY</button></div>
-<div class="card"><b>MATH</b><br><br><button class="btn" onclick="playGame('MATH ₹6 Won!')">PLAY</button></div>
-<div class="card"><b>DICE</b><br><br><button class="btn" onclick="playGame('DICE ₹10 Won!')">PLAY</button></div>
-<div class="card" style="grid-column:span 2;background:gold"><b>MEMORY ₹15</b><br><br><button class="btn" style="background:green" onclick="playGame('MEMORY ₹15 Won!')">PLAY NOW</button></div>
-</div>
-`;
+val functions = FirebaseFunctions.getInstance()
 
-var wallet=21;
-function playGame(msg){
-  wallet+=5;
-  document.getElementById("wal").innerText=wallet;
-  alert("🎉 "+msg+" Wallet: ₹"+wallet);
-}
-function useRef(){
-  wallet+=100;
-  document.getElementById("wal").innerText=wallet;
-  alert("₹100 Added! Wallet: ₹"+wallet);
-}
-function addCash(){
-  var a=prompt("Amount? Min 10");
-  if(a>=10) location.href="upi://pay?pa=9740384015@ybl&pn=Prajwal&am="+a+"&cu=INR";
-}
-function withdraw(){
-  var a=prompt("Withdraw Amount? Wallet: "+wallet);
-  if(a>=50 && a<=wallet){
-    wallet-=a;
-    document.getElementById("wal").innerText=wallet;
-    window.open("https://wa.me/919740384015?text=Withdraw ₹"+a);
-    alert("Withdraw Sent! You get ₹"+Math.round(a*0.9));
-  }else{alert("Min 50 or No Balance");}
-}
-</script>// UPI
-requestManualPayout(
-    amountRupees = 100,
-    method = "UPI",
-    destination = "yourname@bank"
-) { message ->
-    println(message)
+fun requestManualPayout(
+    amountRupees: Long,
+    method: String,
+    destination: String,
+    onResult: (String) -> Unit
+) {
+    val data = hashMapOf(
+        "amountRupees" to amountRupees,
+        "method" to method,
+        "destination" to destination
+    )
+
+    functions.getHttpsCallable("requestWithdrawal")
+        .call(data)
+        .addOnSuccessListener { result ->
+            val response = result.data as Map<*, *>
+            onResult("Request ID: ${response["requestId"]}")
+        }
+        .addOnFailureListener { error ->
+            onResult("Request ವಿಫಲವಾಗಿದೆ: ${error.message}")
+        }
 }
