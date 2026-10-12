@@ -1,71 +1,69 @@
 <!DOCTYPE html>
 <html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body{font-family:Arial; background:#f0f2f5; margin:0; padding:10px; text-align:center; padding-bottom:30px;}
-.wallet{background:linear-gradient(45deg,#FF9800,#F44336); color:white; padding:15px; border-radius:15px; font-size:22px; font-weight:bold; position:sticky; top:0; z-index:99; box-shadow:0 4px 10px rgba(0,0,0,.2);}
-.box{background:white; padding:12px; border-radius:15px; margin:12px 0; box-shadow:0 2px 6px rgba(0,0,0,.1);}
-.grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;}
-.game{background:white; padding:14px; border-radius:15px; box-shadow:0 3px 8px rgba(0,0,0,.15); border:2px solid #eee;}
-.btn{border:none; padding:10px 18px; border-radius:10px; font-weight:bold; cursor:pointer; color:white;}
-.btn-o{background:#FF9800;}.btn-g{background:green;}.btn-b{background:#2196F3;}
-#modal{display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.85); z-index:1000; align-items:center; justify-content:center; padding:15px;}
-.modalBox{background:white; width:95%; max-width:360px; padding:20px; border-radius:20px; max-height:90vh; overflow:auto;}
-input{width:90%; padding:12px; margin:8px 0; border:1px solid #ccc; border-radius:8px;}
+body{font-family:Arial;background:#f0f2f5;margin:0;padding:10px;padding-bottom:40px}
+.wallet{background:linear-gradient(45deg,#FF9800,#F44336);color:#fff;padding:15px;border-radius:12px;font-size:20px;position:sticky;top:0;z-index:10}
+.box{background:#fff;padding:12px;border-radius:12px;margin:10px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.game{background:#fff;padding:15px;border-radius:12px;border:2px solid #eee;text-align:center}
+.btn{border:none;padding:10px 15px;border-radius:8px;font-weight:bold;cursor:pointer;color:#fff;background:#FF9800}
+#modal{position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:999}
+.modalBox{background:#fff;width:90%;max-width:350px;padding:20px;border-radius:15px;text-align:center}
+input{width:90%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ccc}
 </style></head><body>
+<div class="wallet">Wallet: ₹<span id="wallet">21</span></div>
 
-<div class="wallet">💰 Wallet: ₹<span id="wallet">21</span></div>
-
-<div class="box" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-<div><b>💵 Deposit</b><br><button class="btn btn-g" onclick="openDeposit()">ADD CASH</button></div>
-<div><b>🏦 Withdraw</b><br><button class="btn btn-b" onclick="openWithdraw()">WITHDRAW</button></div>
+<div class="box" style="display:flex; justify-content:space-around;">
+<button class="btn" style="background:green" onclick="openDeposit()">ADD CASH</button>
+<button class="btn" style="background:#2196F3" onclick="openWithdraw()">WITHDRAW</button>
 </div>
 
-<div class="box" style="background:linear-gradient(45deg,#4CAF50,#8BC34A); color:white;">
-<h3 style="margin:5px 0;">👫 REFER & EARN ₹100 FREE</h3>
-<p style="font-size:12px;">ನಿನ್ನ Code: <b id="myRefCode" style="background:white; color:green; padding:4px 8px; border-radius:5px;"></b></p>
-<button class="btn" style="background:white; color:green;" onclick="shareRefer()">📤 SHARE</button>
-<br><br><input type="text" id="enterRefCode" placeholder="Refer Code ಹಾಕಿ" style="width:55%;"><button class="btn btn-o" onclick="applyRefCode()">GET ₹100</button>
-<p style="font-size:11px; margin-top:8px;">Owner Profit: ₹<span id="ownerEarn">0</span> (₹150/Refer + 10% Withdraw)</p>
+<div class="box" style="background:#4CAF50;color:white;">
+<b>👫 REFER & EARN</b><br>
+Your Code: <b id="myRefCode" style="background:white;color:green;padding:3px 6px;border-radius:5px;"></b><br><br>
+<button class="btn" style="background:white;color:green" onclick="shareRefer()">SHARE</button><br><br>
+<input id="enterRefCode" placeholder="Refer Code"><br>
+<button class="btn" onclick="applyRefCode()">GET ₹100</button>
+<p>Owner Earn: ₹<span id="ownerEarn">0</span></p>
 </div>
 
 <div class="grid">
-<div class="game"><b>1. SPIN WIN</b><br>₹5<br><button class="btn btn-o" onclick="openGame('spin')">PLAY</button></div>
-<div class="game"><b>2. SCRATCH</b><br>₹3<br><button class="btn btn-o" onclick="openGame('scratch')">PLAY</button></div>
-<div class="game"><b>3. GUESS 1-100</b><br>₹4<br><button class="btn btn-o" onclick="openGame('guess')">PLAY</button></div>
-<div class="game"><b>4. TAP RACE</b><br>₹2<br><button class="btn btn-o" onclick="openGame('tap')">PLAY</button></div>
-<div class="game"><b>5. MATH QUIZ</b><br>₹6<br><button class="btn btn-o" onclick="openGame('math')">PLAY</button></div>
-<div class="game"><b>6. LUCKY DICE</b><br>₹10<br><button class="btn btn-o" onclick="openGame('dice')">PLAY</button></div>
-<div class="game" style="grid-column:span 2; background:gold;"><b>7. MEMORY MATCH - ₹15</b><br><button class="btn btn-g" onclick="openGame('memory')">PLAY NOW</button></div>
+<div class="game"><b>SPIN</b><br><button class="btn" onclick="playSpin()">PLAY</button></div>
+<div class="game"><b>SCRATCH</b><br><button class="btn" onclick="playScratch()">PLAY</button></div>
+<div class="game"><b>GUESS</b><br><button class="btn" onclick="playGuess()">PLAY</button></div>
+<div class="game"><b>TAP</b><br><button class="btn" onclick="playTap()">PLAY</button></div>
+<div class="game"><b>MATH</b><br><button class="btn" onclick="playMath()">PLAY</button></div>
+<div class="game"><b>DICE</b><br><button class="btn" onclick="playDice()">PLAY</button></div>
+<div class="game" style="grid-column:span 2;background:gold"><b>MEMORY - ₹15</b><br><button class="btn" style="background:green" onclick="playMemory()">PLAY</button></div>
 </div>
 
-<div id="modal"><div class="modalBox"><span style="float:right; font-size:28px; cursor:pointer;" onclick="closeM()">×</span><div id="mContent"></div></div></div>
+<div id="modal"><div class="modalBox"><div style="text-align:right"><span onclick="closeM()" style="font-size:25px;cursor:pointer;">X</span></div><div id="mContent"></div></div></div>
 
 <script>
-let MY_UPI="9740384015@ybl"; let MY_NAME="Prajwal"; let myWhatsapp="919740384015"; let COMMISSION=10;
-let wallet=localStorage.getItem("my_wallet")?parseInt(localStorage.getItem("my_wallet")):21;
-let ownerTotalEarn=localStorage.getItem("owner_earn")?parseInt(localStorage.getItem("owner_earn")):0;
+let MY_UPI="9740384015@ybl"; let MY_NAME="Prajwal"; let WA="919740384015";
+let wallet=parseInt(localStorage.getItem("my_wallet")||"21");
+let ownerEarn=parseInt(localStorage.getItem("owner_earn")||"0");
 document.getElementById("wallet").innerText=wallet;
-document.getElementById("ownerEarn").innerText=ownerTotalEarn;
-function saveW(){localStorage.setItem("my_wallet",wallet); document.getElementById("wallet").innerText=wallet;}
+document.getElementById("ownerEarn").innerText=ownerEarn;
+function save(){localStorage.setItem("my_wallet",wallet);document.getElementById("wallet").innerText=wallet;}
+function openM(){document.getElementById("modal").style.display="flex";}
 function closeM(){document.getElementById("modal").style.display="none";}
-function addCash(amt,msg){wallet+=amt; saveW(); alert("🎉 ₹"+amt+" Added! "+msg); closeM();}
-let myRefCode=localStorage.getItem("my_ref_code"); if(!myRefCode){myRefCode="REF"+Math.floor(1000+Math.random()*9000); localStorage.setItem("my_ref_code",myRefCode);} document.getElementById("myRefCode").innerText=myRefCode;
-function shareRefer(){let link=window.location.href.split('?')[0]+"?ref="+myRefCode; let txt=`🔥 ಈ App ನಲ್ಲಿ ನಾನು ದಿನಕ್ಕೆ ₹500 ಗಳಿಸ್ತಾ ಇದ್ದೀನಿ! ನನ್ನ Code ${myRefCode} ಹಾಕಿದ್ರೆ ನಿನಗೆ ₹100 FREE! 👉 ${link}`; window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`,'_blank');}
-function applyRefCode(){let c=document.getElementById("enterRefCode").value.trim().toUpperCase(); if(!c)return alert("Code ಹಾಕಿ"); if(localStorage.getItem("ref_used"))return alert("Already Used!"); if(c==myRefCode)return alert("ನಿನ್ನದೇ Code ಆಗಲ್ಲ!"); wallet+=100; saveW(); ownerTotalEarn+=150; localStorage.setItem("owner_earn",ownerTotalEarn); document.getElementById("ownerEarn").innerText=ownerTotalEarn; localStorage.setItem("ref_used",c); alert("🎉 ₹100 Bonus Added! Owner ಗೆ ₹150 Commission!"); closeM();}
-function openDeposit(){document.getElementById("modal").style.display="flex"; document.getElementById("mContent").innerHTML=`<h3>💵 Deposit</h3><input type="number" id="depAmt" placeholder="Min ₹10"><br><button class="btn btn-g" onclick="doDep()">PAY NOW</button>`;}
-function doDep(){let a=document.getElementById("depAmt").value; if(!a||a<10)return alert("Min ₹10"); window.location.href=`upi://pay?pa=${MY_UPI}&pn=${MY_NAME}&am=${a}&cu=INR&tn=Deposit`;}
-function openWithdraw(){document.getElementById("modal").style.display="flex"; document.getElementById("mContent").innerHTML=`<h3>🏦 Withdraw (10% Fee)</h3><p>Wallet ₹${wallet} Min ₹50</p><input type="number" id="withAmt" placeholder="Amount"><input type="text" id="upiId" placeholder="Your UPI ID"><br><button class="btn btn-b" onclick="doWith()">WITHDRAW</button><p style="font-size:11px;">Ex: ₹100 Withdraw -> You get ₹90, ₹10 Fee</p>`;}
-function doWith(){let amt=parseInt(document.getElementById("withAmt").value); let upi=document.getElementById("upiId").value; if(!amt||amt<50)return alert("Min ₹50"); if(amt>wallet)return alert("No Money"); if(!upi)return alert("UPI ಹಾಕಿ"); let comm=Math.round((amt*COMMISSION)/100); let userGet=amt-comm; wallet-=amt; saveW(); ownerTotalEarn+=comm; localStorage.setItem("owner_earn",ownerTotalEarn); document.getElementById("ownerEarn").innerText=ownerTotalEarn; let msg=`🔥 WITHDRAW 🔥%0AAmount: ₹${amt}%0AUPI: ${upi}%0AUser Gets: ₹${userGet}%0AYour Commission: ₹${comm}`; window.open(`https://wa.me/${myWhatsapp}?text=${msg}`,'_blank'); alert(`✅ Withdraw Success! ₹${amt} Request ಹೋಗಿದೆ. ನಿಮಗೆ ₹${userGet} ಬರುತ್ತದೆ!`); closeM();}
+function addMoney(a,t){wallet+=a;save();alert("₹"+a+" "+t+" Won!");closeM();}
 
-function openGame(t){
- document.getElementById("modal").style.display="flex";
- if(t=='spin'){let r=Math.floor(Math.random()*10)+1; let win=r>5?5:0; document.getElementById("mContent").innerHTML=`<h3>🎡 Spin Result: ${r}</h3><p>${win?'Won ₹'+win:'Try Again'}</p>${win?`<button class="btn btn-g" onclick="addCash(${win},'Spin')">GET ₹${win}</button>`:`<button class="btn btn-o" onclick="openGame('spin')">SPIN AGAIN</button>`}`;}
- if(t=='scratch'){document.getElementById("mContent").innerHTML=`<h3>🎟️ Scratch Card</h3><div onclick="this.innerText='🎉 ₹3 WON!'; setTimeout(()=>addCash(3,'Scratch'),300)" style="background:silver; padding:40px; border-radius:10px; font-size:20px;">👆 SCRATCH HERE</div>`;}
- if(t=='guess'){let num=Math.floor(Math.random()*10)+1; document.getElementById("mContent").innerHTML=`<h3>🔢 Guess 1-10</h3><input type="number" id="gnum" placeholder="1-10"><br><button class="btn btn-o" onclick="if(document.getElementById('gnum').value==${num}){addCash(4,'Guess')}else{alert('Wrong! Number was ${num}'); closeM();}">GUESS</button>`;}
- if(t=='tap'){let c=0; document.getElementById("mContent").innerHTML=`<h3>👆 Tap in 5 Sec</h3><h1 id="tapC">0</h1><button class="btn btn-o" id="tapBtn" style="padding:30px 50px; font-size:20px;">TAP ME!</button>`; let btn=document.getElementById("tapBtn"); btn.onclick=()=>{c++; document.getElementById("tapC").innerText=c;}; setTimeout(()=>{btn.disabled=true; if(c>20)addCash(2,'Tap Race'); else alert('Only '+c+' Taps, Need 20+');},5000);}
- if(t=='math'){let a=Math.floor(Math.random()*10)+1, b=Math.floor(Math.random()*10)+1; document.getElementById("mContent").innerHTML=`<h3>🧠 ${a}+${b}=?</h3><input type="number" id="mans"><br><button class="btn btn-o" onclick="if(document.getElementById('mans').value==${a+b}){addCash(6,'Math')}else{alert('Wrong!'); closeM();}">SUBMIT</button>`;}
- if(t=='dice'){let d=Math.floor(Math.random()*6)+1; let w=d==6?10:d>=4?2:0; document.getElementById("mContent").innerHTML=`<h3>🎲 Dice: ${d}</h3><p>${w?'Won ₹'+w:'Lose'}</p>${w?`<button class="btn btn-g" onclick="addCash(${w},'Dice')">GET ₹${w}</button>`:`<button class="btn btn-o" onclick="openGame('dice')">ROLL AGAIN</button>`}`;}
- if(t=='memory'){document.getElementById("mContent").innerHTML=`<h3>🧩 Memory Match</h3><div id="board" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;"></div>`; let em=['🍎','🍎','🍌','🍌','🍇','🍇'].sort(()=>Math.random()-0.5); let board=document.getElementById("board"), first=null, matched=0; em.forEach(e=>{let d=document.createElement("div"); d.style.cssText="background:#ddd; padding:20px; border-radius:8px; font-size:24px; cursor:pointer;"; d.innerText="❓"; d.onclick=()=>{if(d.innerText!="❓")return; d.innerText=e; if(!first)first=d; else{if(first.innerText==d.innerText){matched++; first=null; if(matched==3)setTimeout(()=>addCash(15,'Memory'),400);}else{setTimeout(()=>{first.innerText="❓"; d.innerText="❓"; first=null;},600);}}}; board.appendChild(d);});}
-}
-(function(){let p=new URLSearchParams(window.location.search).get('ref'); if(p&&!localStorage.getItem("ref_used")){document.getElementById("enterRefCode").value=p; setTimeout(()=>applyRefCode(),1000);}})();
-</script></body></html> 
+// REFER
+let myCode=localStorage.getItem("my_ref_code"); if(!myCode){myCode="REF"+Math.floor(1000+Math.random()*9000);localStorage.setItem("my_ref_code",myCode);} document.getElementById("myRefCode").innerText=myCode;
+function shareRefer(){let l=location.href.split('?')[0]+"?ref="+myCode; window.open("https://wa.me/?text="+encodeURIComponent("App ನಲ್ಲಿ ₹100 FREE! Code: "+myCode+" Link: "+l));}
+function applyRefCode(){let c=document.getElementById("enterRefCode").value.trim().toUpperCase(); if(!c)return alert("Code ಹಾಕಿ"); if(localStorage.getItem("ref_used"))return alert("Already Used"); if(c==myCode)return alert("Own Code ಆಗಲ್ಲ"); wallet+=100; save(); ownerEarn+=150; localStorage.setItem("owner_earn",ownerEarn); document.getElementById("ownerEarn").innerText=ownerEarn; localStorage.setItem("ref_used",c); alert("₹100 Added!"); closeM();}
+
+function openDeposit(){document.getElementById("mContent").innerHTML='<h3>ADD CASH</h3><input type="number" id="dep" placeholder="Min 10"><br><button class="btn" style="background:green" onclick="goDep()">PAY</button>'; openM();}
+function goDep(){let a=document.getElementById("dep").value; if(a<10)return alert("Min 10"); location.href="upi://pay?pa="+MY_UPI+"&pn="+MY_NAME+"&am="+a+"&cu=INR";}
+
+function openWithdraw(){document.getElementById("mContent").innerHTML='<h3>WITHDRAW 10% Fee</h3><p>Wallet ₹'+wallet+'</p><input type="number" id="wam" placeholder="Min 50"><input type="text" id="upi" placeholder="Your UPI"><br><button class="btn" style="background:#2196F3" onclick="goWith()">WITHDRAW</button>'; openM();}
+function goWith(){let a=parseInt(document.getElementById("wam").value); let u=document.getElementById("upi").value; if(a<50)return alert("Min 50"); if(a>wallet)return alert("No Balance"); if(!u)return alert("UPI ಹಾಕಿ"); let fee=Math.round(a*0.1); let get=a-fee; wallet-=a; save(); ownerEarn+=fee; localStorage.setItem("owner_earn",ownerEarn); document.getElementById("ownerEarn").innerText=ownerEarn; window.open("https://wa.me/"+WA+"?text=Withdraw ₹"+a+" UPI:"+u+" UserGet ₹"+get); alert("Withdraw Success! You get ₹"+get); closeM();}
+
+// GAMES - FIXED
+function playSpin(){let r=Math.floor(Math.random()*10); let win=r>5?5:0; document.getElementById("mContent").innerHTML='<h2>🎡 '+r+'</h2><p>'+(win?'You Won ₹'+win:'Try Again')+'</p>'+(win?'<button class="btn" style="background:green" onclick="addMoney('+win+',\'Spin\')">GET ₹'+win+'</button>':'<button class="btn" onclick="playSpin()">AGAIN</button>'); openM();}
+function playScratch(){document.getElementById("mContent").innerHTML='<h3>Scratch</h3><div onclick="addMoney(3,\'Scratch\')" style="background:silver;padding:40px;border-radius:10px;">TAP TO SCRATCH</div>'; openM();}
+function playGuess(){let n=Math.floor(Math.random()*10)+1; document.getElementById("mContent").innerHTML='<h3>Guess 1-10</h3><input type="number" id="gn" placeholder="1-10"><br><button class="btn" onclick="if(document.getElementById(\'gn\').value=='+n+'){addMoney(4,\'Guess\')}else{alert(\'Wrong! Was '+n+'\'); closeM();}">CHECK</button>'; openM();}
+function playTap(){document.getElementById("mContent").innerHTML='<h3>Tap 5 Sec</h3><h1 id="tc">0</h1><button class="btn" id="tb" style="padding:30px 50px">TAP ME</button>'; openM(); let c=0; let b=document.getElementById("tb"); b.onclick=function(){c++;document.getElementById("tc").innerText=c;}; setTimeout(function(){b.disabled=true; if(c>20){addMoney(2,'Tap')}else{alert(c+' taps only, need 20'); closeM();}},5000);}
+function playMath(){let a=Math.floor(Math.random()*10)+1, b=Math.floor(Math.random()*10)+1; document.getElementById("mContent").innerHTML='<h3>'+a+'+'+b+'=?</h3><input type="number" id="ma"><br><button class="btn" onclick="if(document.getElementById(\'ma\').value=='+(a+b)+'){addMoney(6,\'Math
