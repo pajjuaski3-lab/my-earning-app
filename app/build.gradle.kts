@@ -39,4 +39,4 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.foundation:foundation")
     debugImplementation("androidx.compose.ui:ui-tooling")
-}
+}implementation("com.google.android.gms:play-services-ads:25.5.0")
