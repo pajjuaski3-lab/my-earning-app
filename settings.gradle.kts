@@ -1,4 +1,3 @@
-
 pluginManagement {
     repositories {
         google()
@@ -11,11 +10,12 @@ dependencyResolutionManagement {
     repositoriesMode.set(
         RepositoriesMode.FAIL_ON_PROJECT_REPOS
     )
+
     repositories {
         google()
         mavenCentral()
     }
 }
 
-rootProject.name = "EarnMoney"
+rootProject.name = "GameWorld"
 include(":app")
