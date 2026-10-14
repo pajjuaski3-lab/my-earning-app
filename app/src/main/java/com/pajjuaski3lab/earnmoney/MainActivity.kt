@@ -1,225 +1,195 @@
-
 package com.pajjuaski3lab.earnmoney
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+private val Blue = Color(0xFF1565C0)
+private val LightBlue = Color(0xFFEAF3FF)
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             MaterialTheme {
-                EarnMoneyApp()
+                EarnMoneyScreen()
             }
         }
     }
 }
 
 @Composable
-fun EarnMoneyApp() {
-    var page by remember { mutableStateOf("Home") }
-    var points by remember { mutableIntStateOf(0) }
-    var amount by remember { mutableStateOf("100") }
-    var upi by remember { mutableStateOf("") }
-    var referral by remember { mutableStateOf("PAJJU123") }
-    var message by remember { mutableStateOf("") }
-
+fun EarnMoneyScreen() {
     Scaffold(
+        containerColor = LightBlue,
         topBar = {
-            TopAppBar(
-                title = { Text("Earn Money") }
-            )
-        },
-        bottomBar = {
-            NavigationBar {
-                listOf("Home", "Tasks", "Wallet", "Refer").forEach {
-                    NavigationBarItem(
-                        selected = page == it,
-                        onClick = { page = it },
-                        icon = {
-                            Text(
-                                when (it) {
-                                    "Home" -> "⌂"
-                                    "Tasks" -> "✓"
-                                    "Wallet" -> "₹"
-                                    else -> "👥"
-                                }
-                            )
-                        },
-                        label = { Text(it) }
+            Surface(color = Blue) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Text(
+                        text = "Earn Money",
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                    Text(
+                        text = "Complete tasks and earn rewards",
+                        color = Color.White
                     )
                 }
             }
         }
     ) { padding ->
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
+
             item {
-                Card {
-                    Column(Modifier.padding(20.dp)) {
-                        Text("ನಿಮ್ಮ Demo Wallet")
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Blue
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(22.dp)
+                    ) {
                         Text(
-                            "$points Points",
-                            fontSize = 30.sp,
+                            text = "My Wallet",
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+
+                        Text(
+                            text = "₹0.00",
+                            color = Color.White,
+                            fontSize = 36.sp,
                             fontWeight = FontWeight.Bold
                         )
-                        Text("ಇವು ನಿಜವಾದ ಹಣವಲ್ಲ.")
-                    }
-                }
-            }
 
-            when (page) {
-                "Home" -> {
-                    item {
-                        Text("Welcome!", fontSize = 24.sp)
-                        Text("Tasks ಪೂರ್ಣಗೊಳಿಸಿ demo points ಪಡೆಯಿರಿ.")
-                        Text("ಜಾಹೀರಾತುಗಳನ್ನು ಇಲ್ಲಿ ನಂತರ ಸೇರಿಸಬಹುದು.")
-                    }
-                    item {
-                        Button(
-                            onClick = { page = "Tasks" },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text("Start Earning")
-                        }
-                    }
-                }
-
-                "Tasks" -> {
-                    item {
-                        Text("Available Tasks", fontSize = 22.sp)
-                    }
-                    item {
-                        TaskItem("Complete profile", 10) {
-                            points += 10
-                            message = "10 demo points ಸೇರಿಸಲಾಗಿದೆ."
-                        }
-                    }
-                    item {
-                        TaskItem("Read safety tips", 5) {
-                            points += 5
-                            message = "5 demo points ಸೇರಿಸಲಾಗಿದೆ."
-                        }
-                    }
-                    item {
-                        TaskItem("Daily bonus demo", 2) {
-                            points += 2
-                            message = "2 demo points ಸೇರಿಸಲಾಗಿದೆ."
-                        }
-                    }
-                }
-
-                "Wallet" -> {
-                    item {
-                        Text("Withdrawal Request", fontSize = 22.sp)
-                    }
-                    item {
-                        OutlinedTextField(
-                            value = amount,
-                            onValueChange = { amount = it },
-                            label = { Text("Amount in ₹") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                    item {
-                        OutlinedTextField(
-                            value = upi,
-                            onValueChange = { upi = it },
-                            label = { Text("UPI ID") },
-                            placeholder = { Text("name@bank") },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                    item {
-                        Button(
-                            onClick = {
-                                val value = amount.toIntOrNull()
-                                message = if (
-                                    value != null &&
-                                    value > 0 &&
-                                    upi.contains("@")
-                                ) {
-                                    "Demo request ಮಾತ್ರ. ಹಣ ಕಳುಹಿಸಿಲ್ಲ."
-                                } else {
-                                    "ಮೊತ್ತ ಮತ್ತು UPI ID ಪರಿಶೀಲಿಸಿ."
-                                }
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text("Request Withdrawal")
-                        }
-                    }
-                    item {
                         Text(
-                            "ಈ ಆವೃತ್ತಿಯಲ್ಲಿ ನಿಜವಾದ UPI ಪಾವತಿ ಇಲ್ಲ."
+                            text = "Demo balance",
+                            color = Color.White
                         )
-                    }
-                }
-
-                "Refer" -> {
-                    item {
-                        Text("Refer & Earn", fontSize = 22.sp)
-                        Text("Demo Referral Code: $referral")
-                    }
-                    item {
-                        Button(
-                            onClick = {
-                                message =
-                                    "Referral code: $referral"
-                            }
-                        ) {
-                            Text("Show Referral Code")
-                        }
                     }
                 }
             }
 
-            if (message.isNotBlank()) {
-                item {
-                    Text(
-                        message,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+            item {
+                Text(
+                    text = "Earn Rewards",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            item {
+                RewardCard(
+                    title = "Daily Check-in",
+                    description = "Check in to explore daily rewards",
+                    buttonText = "Check In"
+                )
+            }
+
+            item {
+                RewardCard(
+                    title = "Complete Tasks",
+                    description = "Explore available earning tasks",
+                    buttonText = "View Tasks"
+                )
+            }
+
+            item {
+                RewardCard(
+                    title = "Refer & Earn",
+                    description = "Invite friends to join the app",
+                    buttonText = "Refer Friends"
+                )
+            }
+
+            item {
+                RewardCard(
+                    title = "Withdraw",
+                    description = "Submit a withdrawal request when eligible",
+                    buttonText = "Withdrawal"
+                )
+            }
+
+            item {
+                Text(
+                    text = "Note: This is a demo interface. No real money is credited or paid."
+                )
             }
         }
     }
 }
 
 @Composable
-fun TaskItem(
+fun RewardCard(
     title: String,
-    reward: Int,
-    onClick: () -> Unit
+    description: String,
+    buttonText: String
 ) {
-    Card {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
+    var clicked by androidx.compose.runtime.remember {
+        androidx.compose.runtime.mutableStateOf(false)
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
         ) {
-            Column(Modifier.weight(1f)) {
-                Text(title, fontWeight = FontWeight.Medium)
-                Text("$reward demo points")
+            Text(
+                text = title,
+                fontSize = 19.sp,
+                fontWeight = FontWeight.Bold,
+                color = Blue
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(text = description)
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(
+                onClick = { clicked = !clicked },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Blue
+                )
+            ) {
+                Text(buttonText)
             }
-            Button(onClick = onClick) {
-                Text("Complete")
+
+            if (clicked) {
+                Text(
+                    text = "Feature coming soon!",
+                    color = Blue,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
             }
         }
     }
