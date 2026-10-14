@@ -4,20 +4,34 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val Blue = Color(0xFF1565C0)
-private val LightBlue = Color(0xFFEAF3FF)
+private val AppBlue = Color(0xFF1565C0)
+private val BackgroundBlue = Color(0xFFF0F6FF)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,48 +39,52 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                EarnMoneyScreen()
+                EarnMoneyApp()
             }
         }
     }
 }
 
 @Composable
-fun EarnMoneyScreen() {
+fun EarnMoneyApp() {
     Scaffold(
-        containerColor = LightBlue,
+        containerColor = BackgroundBlue,
         topBar = {
-            Surface(color = Blue) {
-                Column(modifier = Modifier.padding(20.dp)) {
+            Surface(color = AppBlue) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                ) {
                     Text(
                         text = "Earn Money",
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
+
                     Text(
-                        text = "Complete tasks and earn rewards",
+                        text = "Tasks • Rewards • Wallet",
                         color = Color.White
                     )
                 }
             }
         }
-    ) { padding ->
+    ) { innerPadding ->
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(innerPadding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Blue
+                        containerColor = AppBlue
                     )
                 ) {
                     Column(
@@ -96,46 +114,58 @@ fun EarnMoneyScreen() {
             item {
                 Text(
                     text = "Earn Rewards",
-                    fontSize = 22.sp,
+                    fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
 
             item {
-                RewardCard(
+                FeatureCard(
                     title = "Daily Check-in",
-                    description = "Check in to explore daily rewards",
+                    description = "Explore daily rewards",
                     buttonText = "Check In"
                 )
             }
 
             item {
-                RewardCard(
+                FeatureCard(
                     title = "Complete Tasks",
-                    description = "Explore available earning tasks",
+                    description = "Discover available tasks",
                     buttonText = "View Tasks"
                 )
             }
 
             item {
-                RewardCard(
+                FeatureCard(
+                    title = "Spin & Win",
+                    description = "Spin game demo",
+                    buttonText = "Play Game"
+                )
+            }
+
+            item {
+                FeatureCard(
                     title = "Refer & Earn",
-                    description = "Invite friends to join the app",
+                    description = "Invite friends to the app",
                     buttonText = "Refer Friends"
                 )
             }
 
             item {
-                RewardCard(
-                    title = "Withdraw",
-                    description = "Submit a withdrawal request when eligible",
-                    buttonText = "Withdrawal"
+                FeatureCard(
+                    title = "Withdraw Money",
+                    description = "Withdrawal feature demo",
+                    buttonText = "Withdraw"
                 )
             }
 
             item {
                 Text(
-                    text = "Note: This is a demo interface. No real money is credited or paid."
+                    text = "Demo only: rewards and withdrawals " +
+                        "are not connected to real money.",
+                    color = Color.DarkGray,
+                    fontSize = 13.sp,
+                    modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
         }
@@ -143,14 +173,12 @@ fun EarnMoneyScreen() {
 }
 
 @Composable
-fun RewardCard(
+fun FeatureCard(
     title: String,
     description: String,
     buttonText: String
 ) {
-    var clicked by androidx.compose.runtime.remember {
-        androidx.compose.runtime.mutableStateOf(false)
-    }
+    val clicked = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -164,9 +192,9 @@ fun RewardCard(
         ) {
             Text(
                 text = title,
+                color = AppBlue,
                 fontSize = 19.sp,
-                fontWeight = FontWeight.Bold,
-                color = Blue
+                fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -176,19 +204,21 @@ fun RewardCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             Button(
-                onClick = { clicked = !clicked },
+                onClick = {
+                    clicked.value = !clicked.value
+                },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Blue
+                    containerColor = AppBlue
                 )
             ) {
                 Text(buttonText)
             }
 
-            if (clicked) {
+            if (clicked.value) {
                 Text(
-                    text = "Feature coming soon!",
-                    color = Blue,
-                    modifier = Modifier.padding(top = 8.dp)
+                    text = "This feature is coming soon.",
+                    modifier = Modifier.padding(top = 8.dp),
+                    color = AppBlue
                 )
             }
         }
